@@ -99,17 +99,17 @@ class RecipeControllerTest {
                 .andExpect(status().isBadRequest());
     }
 
-//    @Test
-//    void shouldImportRecipe() throws Exception {
-//        Recipe recipe = new Recipe();
-//        recipe.setTitle("Arrabiata");
-//
-//        Mockito.when(recipeService.importFromMealDb("Arrabiata"))
-//                .thenReturn(recipe);
-//
-//        mockMvc.perform(post("/recipes/import?name=Arrabiata"))
-//                .andExpect(status().isCreated());
-//    }
+    @Test
+    void shouldImportRecipe() throws Exception {
+        Recipe recipe = new Recipe();
+        recipe.setTitle("Arrabiata");
+
+        Mockito.when(recipeService.importFromMealDb("Arrabiata"))
+                .thenReturn(recipe);
+
+        mockMvc.perform(post("/recipes/import?name=Arrabiata"))
+                .andExpect(status().isCreated());
+    }
 
     // -------------------------
     // CREATE

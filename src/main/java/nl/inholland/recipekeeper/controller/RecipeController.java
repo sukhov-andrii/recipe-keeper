@@ -58,4 +58,14 @@ public class RecipeController {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(recipeMapper.toDto(saved));
     }
+
+
+    @PostMapping("/import")
+    public ResponseEntity<RecipeResponse> importRecipe(@RequestParam @NotBlank String name) {
+        Recipe recipe = recipeService.importFromMealDb(name);
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(recipeMapper.toDto(recipe));
+    }
+
 }

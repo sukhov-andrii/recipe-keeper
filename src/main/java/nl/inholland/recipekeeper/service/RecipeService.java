@@ -23,11 +23,13 @@ public class RecipeService {
 
     private final RecipeRepository recipeRepository;
     private final IngredientService ingredientService;
+    private final RecipeImportService recipeImportService;
 
-
-    public RecipeService(RecipeRepository recipeRepository, IngredientService ingredientService) {
+    public RecipeService(RecipeRepository recipeRepository, IngredientService ingredientService,
+                         RecipeImportService recipeImportService) {
         this.recipeRepository = recipeRepository;
         this.ingredientService = ingredientService;
+        this.recipeImportService = recipeImportService;
     }
 
     public Page<Recipe> getRecipes(Pageable pageable) {
@@ -60,5 +62,7 @@ public class RecipeService {
         return recipeRepository.save(recipe);
     }
 
-
+    public Recipe importFromMealDb(String mealName) {
+        return recipeImportService.importFromMealDb(mealName);
+    }
 }
