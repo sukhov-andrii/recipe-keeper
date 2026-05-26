@@ -46,19 +46,19 @@ public class RecipeController {
                 .body(summaryPage);
     }
 
+//    @GetMapping("/search")
+//    public ResponseEntity<List<RecipeSummaryResponse>> search(@RequestParam @NotBlank String query) {
+//        List<Recipe> result = recipeService.query(query);
+//        return ResponseEntity.ok(result.stream()
+//                .map(recipeMapper::toSummary)
+//                .toList());
+//    }
+
     @GetMapping("/{id}")
     public ResponseEntity<RecipeResponse> getRecipe(@PathVariable UUID id) {
         Recipe recipe = recipeService.getRecipeById(id);
         return ResponseEntity.ok(recipeMapper.toDto(recipe));
     }
-
-    @PostMapping
-    public ResponseEntity<RecipeResponse> addRecipe(@Valid @RequestBody RecipeCreateRequest request) {
-        Recipe saved = recipeService.createFromRequest(request);
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(recipeMapper.toDto(saved));
-    }
-
 
     @PostMapping("/import")
     public ResponseEntity<RecipeResponse> importRecipe(@RequestParam @NotBlank String name) {
@@ -68,4 +68,34 @@ public class RecipeController {
                 .body(recipeMapper.toDto(recipe));
     }
 
+    @PostMapping
+    public ResponseEntity<RecipeResponse> addRecipe(@Valid @RequestBody RecipeCreateRequest request) {
+        Recipe saved = recipeService.createFromRequest(request);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(recipeMapper.toDto(saved));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteRecipe(@PathVariable UUID id) {
+        recipeService.deleteRecipe(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{id}/cooked")
+    public ResponseEntity<RecipeResponse> updateCooked(
+            @PathVariable UUID id,
+            @Valid @RequestBody PatchCookedRequest request
+    ) {
+        Recipe updated = recipeService.updateCooked(id, request.cooked());
+        return ResponseEntity.ok(recipeMapper.toDto(updated));
+    }
+
+    @PatchMapping("/{id}/rating")
+    public ResponseEntity<RecipeResponse> updateRating(
+            @PathVariable UUID id,
+            @Valid @RequestBody PatchRatingRequest request
+    ) {
+        Recipe updated = recipeService.updateRating(id, request.rating());
+        return ResponseEntity.ok(recipeMapper.toDto(updated));
+    }
 }
