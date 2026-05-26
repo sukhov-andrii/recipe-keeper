@@ -46,13 +46,13 @@ public class RecipeController {
                 .body(summaryPage);
     }
 
-//    @GetMapping("/search")
-//    public ResponseEntity<List<RecipeSummaryResponse>> search(@RequestParam @NotBlank String query) {
-//        List<Recipe> result = recipeService.query(query);
-//        return ResponseEntity.ok(result.stream()
-//                .map(recipeMapper::toSummary)
-//                .toList());
-//    }
+    @GetMapping("/search")
+    public ResponseEntity<List<RecipeSummaryResponse>> search(@RequestParam @NotBlank String query) {
+        List<Recipe> result = recipeService.query(query);
+        return ResponseEntity.ok(result.stream()
+                .map(recipeMapper::toSummary)
+                .toList());
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<RecipeResponse> getRecipe(@PathVariable UUID id) {

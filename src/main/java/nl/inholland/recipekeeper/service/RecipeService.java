@@ -23,15 +23,14 @@ public class RecipeService {
 
     private final RecipeRepository recipeRepository;
     private final IngredientService ingredientService;
-//    private final RecipeQueryService recipeQueryService;
+    private final RecipeQueryService recipeQueryService;
     private final RecipeImportService recipeImportService;
 
     public RecipeService(RecipeRepository recipeRepository, IngredientService ingredientService,
-//                         RecipeQueryService recipeQueryService,
-                         RecipeImportService recipeImportService) {
+                         RecipeQueryService recipeQueryService, RecipeImportService recipeImportService) {
         this.recipeRepository = recipeRepository;
         this.ingredientService = ingredientService;
-//        this.recipeQueryService = recipeQueryService;
+        this.recipeQueryService = recipeQueryService;
         this.recipeImportService = recipeImportService;
     }
 
@@ -69,11 +68,11 @@ public class RecipeService {
         return recipeImportService.importFromMealDb(mealName);
     }
 
-//    public List<Recipe> query(String query) {
-//        String normalized = TextSanitizer.normalize(query);
-//        return this.recipeQueryService.search(normalized);
-//    }
-//
+    public List<Recipe> query(String query) {
+        String normalized = TextSanitizer.normalize(query);
+        return this.recipeQueryService.search(normalized);
+    }
+
     public void deleteRecipe(UUID id) {
         recipeRepository.deleteById(id);
     }

@@ -96,86 +96,86 @@ class RecipeServiceTest {
                 () -> recipeService.getRecipeById(id));
     }
 
-//    // ---------------------------
-//    // UPDATE COOKED
-//    // ---------------------------
-//
-//    @Test
-//    void shouldUpdateCooked() {
-//        UUID id = UUID.randomUUID();
-//
-//        Recipe recipe = new Recipe();
-//        recipe.setCooked(false);
-//
-//        when(recipeRepository.findById(id)).thenReturn(Optional.of(recipe));
-//        when(recipeRepository.save(any())).thenAnswer(inv -> inv.getArgument(0));
-//
-//        Recipe result = recipeService.updateCooked(id, true);
-//
-//        assertTrue(result.isCooked());
-//    }
-//
-//    // ---------------------------
-//    // UPDATE RATING
-//    // ---------------------------
-//
-//    @Test
-//    void shouldUpdateRating() {
-//        UUID id = UUID.randomUUID();
-//
-//        Recipe recipe = new Recipe();
-//
-//        when(recipeRepository.findById(id)).thenReturn(Optional.of(recipe));
-//        when(recipeRepository.save(any())).thenAnswer(inv -> inv.getArgument(0));
-//
-//        Recipe result = recipeService.updateRating(id, 5);
-//
-//        assertEquals(5, result.getRating());
-//    }
-//
-//    // ---------------------------
-//    // DELETE
-//    // ---------------------------
-//
-//    @Test
-//    void shouldDeleteRecipe() {
-//        UUID id = UUID.randomUUID();
-//
-//        recipeService.deleteRecipe(id);
-//
-//        verify(recipeRepository).deleteById(id);
-//    }
-//
-//    // ---------------------------
-//    // SEARCH
-//    // ---------------------------
-//
-//    @Test
-//    void shouldReturnQueryResults() {
-//
-//        Recipe r1 = new Recipe();
-//        Recipe r2 = new Recipe();
-//
-//        when(recipeQueryService.search("pasta"))
-//                .thenReturn(List.of(r1, r2));
-//
-//        List<Recipe> result = recipeService.query("pasta");
-//
-//        assertEquals(2, result.size());
-//        verify(recipeQueryService).search("pasta");
-//    }
-//
-//    // ---------------------------
-//    // UPDATE FAIL CASE
-//    // ---------------------------
-//
-//    @Test
-//    void shouldThrowWhenUpdatingMissingRecipe() {
-//        UUID id = UUID.randomUUID();
-//
-//        when(recipeRepository.findById(id)).thenReturn(Optional.empty());
-//
-//        assertThrows(RecipeNotFoundException.class,
-//                () -> recipeService.updateCooked(id, true));
-//    }
+    // ---------------------------
+    // UPDATE COOKED
+    // ---------------------------
+
+    @Test
+    void shouldUpdateCooked() {
+        UUID id = UUID.randomUUID();
+
+        Recipe recipe = new Recipe();
+        recipe.setCooked(false);
+
+        when(recipeRepository.findById(id)).thenReturn(Optional.of(recipe));
+        when(recipeRepository.save(any())).thenAnswer(inv -> inv.getArgument(0));
+
+        Recipe result = recipeService.updateCooked(id, true);
+
+        assertTrue(result.isCooked());
+    }
+
+    // ---------------------------
+    // UPDATE RATING
+    // ---------------------------
+
+    @Test
+    void shouldUpdateRating() {
+        UUID id = UUID.randomUUID();
+
+        Recipe recipe = new Recipe();
+
+        when(recipeRepository.findById(id)).thenReturn(Optional.of(recipe));
+        when(recipeRepository.save(any())).thenAnswer(inv -> inv.getArgument(0));
+
+        Recipe result = recipeService.updateRating(id, 5);
+
+        assertEquals(5, result.getRating());
+    }
+
+    // ---------------------------
+    // DELETE
+    // ---------------------------
+
+    @Test
+    void shouldDeleteRecipe() {
+        UUID id = UUID.randomUUID();
+
+        recipeService.deleteRecipe(id);
+
+        verify(recipeRepository).deleteById(id);
+    }
+
+    // ---------------------------
+    // SEARCH
+    // ---------------------------
+
+    @Test
+    void shouldReturnQueryResults() {
+
+        Recipe r1 = new Recipe();
+        Recipe r2 = new Recipe();
+
+        when(recipeQueryService.search("pasta"))
+                .thenReturn(List.of(r1, r2));
+
+        List<Recipe> result = recipeService.query("pasta");
+
+        assertEquals(2, result.size());
+        verify(recipeQueryService).search("pasta");
+    }
+
+    // ---------------------------
+    // UPDATE FAIL CASE
+    // ---------------------------
+
+    @Test
+    void shouldThrowWhenUpdatingMissingRecipe() {
+        UUID id = UUID.randomUUID();
+
+        when(recipeRepository.findById(id)).thenReturn(Optional.empty());
+
+        assertThrows(RecipeNotFoundException.class,
+                () -> recipeService.updateCooked(id, true));
+    }
 }

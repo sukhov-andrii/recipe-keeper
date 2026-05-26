@@ -167,80 +167,80 @@ class RecipeControllerTest {
                     """))
                 .andExpect(status().isCreated());
     }
-//
-//    // -------------------------
-//    // DELETE
-//    // -------------------------
-//    @Test
-//    void shouldDeleteRecipe() throws Exception {
-//        UUID id = UUID.randomUUID();
-//
-//        mockMvc.perform(delete("/recipes/" + id))
-//                .andExpect(status().isNoContent());
-//
-//        Mockito.verify(recipeService).deleteRecipe(id);
-//    }
-//
-//    // -------------------------
-//    // PATCH cooked
-//    // -------------------------
-//    @Test
-//    void shouldUpdateCooked() throws Exception {
-//        UUID id = UUID.randomUUID();
-//
-//        Recipe updated = new Recipe();
-//        updated.setCooked(true);
-//
-//        Mockito.when(recipeService.updateCooked(id, true))
-//                .thenReturn(updated);
-//
-//        mockMvc.perform(patch("/recipes/" + id + "/cooked")
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content("""
-//                            {
-//                              "cooked": true
-//                            }
-//                        """))
-//                .andExpect(status().isOk());
-//    }
-//
-//    // -------------------------
-//    // PATCH rating validation
-//    // -------------------------
-//    @Test
-//    void shouldReturn400WhenRatingInvalid() throws Exception {
-//        UUID id = UUID.randomUUID();
-//
-//        mockMvc.perform(patch("/recipes/" + id + "/rating")
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content("""
-//                            {
-//                              "rating": 6
-//                            }
-//                        """))
-//                .andExpect(status().isBadRequest());
-//    }
-//
-//    // -------------------------
-//    // PATCH rating
-//    // -------------------------
-//    @Test
-//    void shouldUpdateRating() throws Exception {
-//        UUID id = UUID.randomUUID();
-//
-//        Recipe updated = new Recipe();
-//        updated.setRating(5);
-//
-//        Mockito.when(recipeService.updateRating(id, 5))
-//                .thenReturn(updated);
-//
-//        mockMvc.perform(patch("/recipes/" + id + "/rating")
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content("""
-//                            {
-//                              "rating": 5
-//                            }
-//                        """))
-//                .andExpect(status().isOk());
-//    }
+
+    // -------------------------
+    // DELETE
+    // -------------------------
+    @Test
+    void shouldDeleteRecipe() throws Exception {
+        UUID id = UUID.randomUUID();
+
+        mockMvc.perform(delete("/recipes/" + id))
+                .andExpect(status().isNoContent());
+
+        Mockito.verify(recipeService).deleteRecipe(id);
+    }
+
+    // -------------------------
+    // PATCH cooked
+    // -------------------------
+    @Test
+    void shouldUpdateCooked() throws Exception {
+        UUID id = UUID.randomUUID();
+
+        Recipe updated = new Recipe();
+        updated.setCooked(true);
+
+        Mockito.when(recipeService.updateCooked(id, true))
+                .thenReturn(updated);
+
+        mockMvc.perform(patch("/recipes/" + id + "/cooked")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                            {
+                              "cooked": true
+                            }
+                        """))
+                .andExpect(status().isOk());
+    }
+
+    // -------------------------
+    // PATCH rating validation
+    // -------------------------
+    @Test
+    void shouldReturn400WhenRatingInvalid() throws Exception {
+        UUID id = UUID.randomUUID();
+
+        mockMvc.perform(patch("/recipes/" + id + "/rating")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                            {
+                              "rating": 6
+                            }
+                        """))
+                .andExpect(status().isBadRequest());
+    }
+
+    // -------------------------
+    // PATCH rating
+    // -------------------------
+    @Test
+    void shouldUpdateRating() throws Exception {
+        UUID id = UUID.randomUUID();
+
+        Recipe updated = new Recipe();
+        updated.setRating(5);
+
+        Mockito.when(recipeService.updateRating(id, 5))
+                .thenReturn(updated);
+
+        mockMvc.perform(patch("/recipes/" + id + "/rating")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                            {
+                              "rating": 5
+                            }
+                        """))
+                .andExpect(status().isOk());
+    }
 }
