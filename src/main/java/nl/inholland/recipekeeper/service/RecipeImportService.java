@@ -30,18 +30,18 @@ public class RecipeImportService {
     private final MealDbRecipeProvider mealDbRecipeProvider;
     private final MealDbAdapter mealDbAdapter;
     private final IngredientService ingredientService;
-//    private final ImageDownloadService imageDownloadService;
+    private final ImageDownloadService imageDownloadService;
     private final RecipeRepository recipeRepository;
 
     public RecipeImportService(MealDbRecipeProvider mealDbRecipeProvider,
                                MealDbAdapter mealDbAdapter,
                                IngredientService ingredientService,
-//                               ImageDownloadService imageDownloadService,
+                               ImageDownloadService imageDownloadService,
                                RecipeRepository recipeRepository) {
         this.mealDbRecipeProvider = mealDbRecipeProvider;
         this.mealDbAdapter = mealDbAdapter;
         this.ingredientService = ingredientService;
-//        this.imageDownloadService = imageDownloadService;
+        this.imageDownloadService = imageDownloadService;
         this.recipeRepository = recipeRepository;
     }
 
@@ -75,26 +75,26 @@ public class RecipeImportService {
         // 5. Persist FIRST
         Recipe saved = recipeRepository.save(recipe);
 
-//        // 6. Filesystem side effects AFTER persistence. Images are best-effort, but dont fail import
-//        // FIXME: bad architecture, double save call to database, reliance on JPA transaction
-//        try {
-////            imageDownloadService.downloadAllImages(saved, meal);
-//
-//            String mainUrl = mealDbAdapter.extractMainImage(meal);
-//
-//            List<String> ingredientNames = mealDbAdapter.extractIngredients(meal)
-//                    .stream()
-//                    .map(IngredientDTO::name)
-//                    .toList();
-//
-//            ImageDownloadResult images =
-//                    imageDownloadService.downloadAllImages(mainUrl, ingredientNames, saved.getId());
-//
-//            saved.setThumbnailPath(images.thumbnailPath());
-//            saved.setImagePaths(images.imagePaths());
-//        } catch (ImageDownloadException e) {
-//            log.warn("Image pipeline failed for recipe {} - continuing import", saved.getId(), e);
-//        }
+        // 6. Filesystem side effects AFTER persistence. Images are best-effort, but dont fail import
+        // FIXME: bad architecture, double save call to database, reliance on JPA transaction
+        try {
+//            imageDownloadService.downloadAllImages(saved, meal);
+
+            String mainUrl = mealDbAdapter.extractMainImage(meal);
+
+            List<String> ingredientNames = mealDbAdapter.extractIngredients(meal)
+                    .stream()
+                    .map(IngredientDTO::name)
+                    .toList();
+
+            ImageDownloadResult images =
+                    imageDownloadService.downloadAllImages(mainUrl, ingredientNames, saved.getId());
+
+            saved.setThumbnailPath(images.thumbnailPath());
+            saved.setImagePaths(images.imagePaths());
+        } catch (ImageDownloadException e) {
+            log.warn("Image pipeline failed for recipe {} - continuing import", saved.getId(), e);
+        }
 
 
 
