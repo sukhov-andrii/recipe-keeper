@@ -576,3 +576,6 @@ build/
 .vscode/
 
 
+### Logs and data
+logs/
+data/
