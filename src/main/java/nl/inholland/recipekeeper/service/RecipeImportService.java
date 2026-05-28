@@ -105,7 +105,11 @@ public class RecipeImportService {
         try {
             ImageDownloadResult images = imageFuture.join();
 
-            saved.setRelatedRecipes(related);
+//            saved.setRelatedRecipes(related); // FIXME: hibernate fix
+            saved.getRelatedRecipes().clear();
+            related.forEach(saved::addRelatedRecipe);
+
+
             saved.setThumbnailPath(images.thumbnailPath());
             saved.setImagePaths(images.imagePaths());
 

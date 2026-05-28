@@ -89,4 +89,9 @@ public class Recipe {
     public void setRelatedRecipes(List<RelatedRecipe> relatedRecipes) {
         this.relatedRecipes = new ArrayList<>(relatedRecipes);
     }
+
+    public void addRelatedRecipe(RelatedRecipe rr) {
+        relatedRecipes.add(rr);
+        rr.setRecipe(this);
+    }
 }

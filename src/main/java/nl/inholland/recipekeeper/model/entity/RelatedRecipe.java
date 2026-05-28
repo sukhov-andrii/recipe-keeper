@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Objects;
 import java.util.UUID;
 
 @Getter
@@ -33,11 +34,11 @@ public class RelatedRecipe {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof RelatedRecipe that)) return false;
-        return id != null && id.equals(that.id);
+        return Objects.equals(relatedMealId, that.relatedMealId);
     }
 
     @Override
     public int hashCode() {
-        return getClass().hashCode();
+        return Objects.hash(relatedMealId);
     }
 }
