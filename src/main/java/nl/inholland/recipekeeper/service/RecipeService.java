@@ -1,9 +1,9 @@
 package nl.inholland.recipekeeper.service;
 
 import lombok.extern.slf4j.Slf4j;
-import nl.inholland.recipekeeper.model.entity.entity.Ingredient;
-import nl.inholland.recipekeeper.model.entity.entity.Recipe;
-import nl.inholland.recipekeeper.model.entity.entity.RecipeIngredient;
+import nl.inholland.recipekeeper.model.entity.Ingredient;
+import nl.inholland.recipekeeper.model.entity.Recipe;
+import nl.inholland.recipekeeper.model.entity.RecipeIngredient;
 import nl.inholland.recipekeeper.model.dto.request.RecipeCreateRequest;
 
 import nl.inholland.recipekeeper.repository.*;
@@ -70,7 +70,7 @@ public class RecipeService {
 
     public List<Recipe> query(String query) {
         String normalized = TextSanitizer.normalize(query);
-        return this.recipeQueryService.search(normalized);
+        return this.recipeQueryService.query(normalized);
     }
 
     public void deleteRecipe(UUID id) {

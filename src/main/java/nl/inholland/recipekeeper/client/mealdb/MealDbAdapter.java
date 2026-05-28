@@ -3,7 +3,7 @@ package nl.inholland.recipekeeper.client.mealdb;
 import com.fasterxml.jackson.databind.JsonNode;
 import nl.inholland.recipekeeper.client.RecipeAdapter;
 import nl.inholland.recipekeeper.model.dto.response.IngredientDTO;
-import nl.inholland.recipekeeper.model.entity.entity.Recipe;
+import nl.inholland.recipekeeper.model.entity.Recipe;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -58,14 +58,7 @@ public class MealDbAdapter implements RecipeAdapter {
     private List<String> parseSteps(JsonNode meal) {
         String raw = meal.path("strInstructions").asText("");
 
-        List<String> lines = Arrays.stream(raw.split("\\r?\\n"))
-                .map(String::trim)
-                .filter(s -> !s.isBlank())
-                .toList();
-
-        if (!lines.isEmpty()) return lines;
-
-        return Arrays.stream(raw.split("(?<=[.!?])\\s+"))
+        return Arrays.stream(raw.split("\\r?\\n"))
                 .map(String::trim)
                 .filter(s -> !s.isBlank())
                 .toList();

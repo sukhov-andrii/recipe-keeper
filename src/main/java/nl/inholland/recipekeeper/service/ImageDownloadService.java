@@ -1,7 +1,8 @@
 package nl.inholland.recipekeeper.service;
 
-import nl.inholland.recipekeeper.exception.external.ImageDownloadException;
+import lombok.extern.slf4j.Slf4j;
 import nl.inholland.recipekeeper.client.mealdb.ImageDownloadResult;
+import nl.inholland.recipekeeper.exception.external.ImageDownloadException;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -13,8 +14,6 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-
-import lombok.extern.slf4j.Slf4j;
 
 
 // IO + filesystem + downloads
@@ -61,13 +60,12 @@ public class ImageDownloadService {
             String safeName = "ingredient-" + index + "-" + recipeId + ".png";
             Path target = recipeDir.resolve(safeName);
 
-            String path = downloadImage(url, target);
 
-            if (path != null) {
-                paths.add(path);
-            } else {
-                log.warn("Image download failed (type=ingredient, recipe={}, ingredient={})",
-                        recipeId, ingredient);
+            try {
+                String path = downloadImage(url, target);
+                if (path != null) paths.add(path);
+            } catch (ImageDownloadException e) {
+                log.warn("Failed ingredient image: {}", ingredient);
             }
 
             index++;

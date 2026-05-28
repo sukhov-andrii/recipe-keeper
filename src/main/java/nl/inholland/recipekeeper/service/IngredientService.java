@@ -1,7 +1,7 @@
 package nl.inholland.recipekeeper.service;
 
 import nl.inholland.recipekeeper.exception.domain.BusinessRuleViolationException;
-import nl.inholland.recipekeeper.model.entity.entity.Ingredient;
+import nl.inholland.recipekeeper.model.entity.Ingredient;
 import nl.inholland.recipekeeper.repository.IngredientRepository;
 import nl.inholland.recipekeeper.util.TextSanitizer;
 import org.springframework.stereotype.Service;

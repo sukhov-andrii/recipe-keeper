@@ -2,6 +2,7 @@ package nl.inholland.recipekeeper.client.mealdb;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import nl.inholland.recipekeeper.client.RecipeClient;
 import nl.inholland.recipekeeper.exception.external.ExternalServiceException;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -12,7 +13,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 
 @Service
-public class MealDbClient {
+public class MealDbClient implements RecipeClient {
 
     private final OkHttpClient client = new OkHttpClient();
     private final ObjectMapper objectMapper = new ObjectMapper();

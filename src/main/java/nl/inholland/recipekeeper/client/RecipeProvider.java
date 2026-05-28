@@ -10,6 +10,4 @@ public interface RecipeProvider {
     JsonNode filterByCategory(String category);
 
     JsonNode filterByArea(String area);
-
-    // TODO: refactor with RecipeDto
 }

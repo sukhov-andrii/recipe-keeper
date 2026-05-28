@@ -3,7 +3,7 @@ package nl.inholland.recipekeeper.controller;
 import nl.inholland.recipekeeper.model.dto.request.RecipeCreateRequest;
 import nl.inholland.recipekeeper.exception.domain.RecipeNotFoundException;
 import nl.inholland.recipekeeper.mapper.RecipeMapper;
-import nl.inholland.recipekeeper.model.entity.entity.Recipe;
+import nl.inholland.recipekeeper.model.entity.Recipe;
 import nl.inholland.recipekeeper.service.RecipeService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;

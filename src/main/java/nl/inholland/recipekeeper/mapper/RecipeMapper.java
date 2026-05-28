@@ -1,7 +1,7 @@
 package nl.inholland.recipekeeper.mapper;
 
-import nl.inholland.recipekeeper.model.entity.entity.Recipe;
-import nl.inholland.recipekeeper.model.entity.entity.RelatedRecipe;
+import nl.inholland.recipekeeper.model.entity.Recipe;
+import nl.inholland.recipekeeper.model.entity.RelatedRecipe;
 import nl.inholland.recipekeeper.model.dto.response.IngredientPortionDTO;
 import nl.inholland.recipekeeper.model.dto.response.RecipeResponse;
 import nl.inholland.recipekeeper.model.dto.response.RecipeSummaryResponse;

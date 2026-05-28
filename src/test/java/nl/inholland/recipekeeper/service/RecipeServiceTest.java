@@ -1,8 +1,8 @@
 package nl.inholland.recipekeeper.service;
 
 //import nl.inholland.recipekeeper.entity.factory.RecipeIngredientFactory;
-import nl.inholland.recipekeeper.model.entity.entity.Ingredient;
-import nl.inholland.recipekeeper.model.entity.entity.Recipe;
+import nl.inholland.recipekeeper.model.entity.Ingredient;
+import nl.inholland.recipekeeper.model.entity.Recipe;
 import nl.inholland.recipekeeper.client.mealdb.MealDbAdapter;
 import nl.inholland.recipekeeper.client.mealdb.MealDbRecipeProvider;
 import nl.inholland.recipekeeper.model.dto.request.IngredientInput;
@@ -156,13 +156,13 @@ class RecipeServiceTest {
         Recipe r1 = new Recipe();
         Recipe r2 = new Recipe();
 
-        when(recipeQueryService.search("pasta"))
+        when(recipeQueryService.query("pasta"))
                 .thenReturn(List.of(r1, r2));
 
         List<Recipe> result = recipeService.query("pasta");
 
         assertEquals(2, result.size());
-        verify(recipeQueryService).search("pasta");
+        verify(recipeQueryService).query("pasta");
     }
 
     // ---------------------------

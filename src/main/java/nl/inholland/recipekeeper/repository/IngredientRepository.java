@@ -1,6 +1,6 @@
 package nl.inholland.recipekeeper.repository;
 
-import nl.inholland.recipekeeper.model.entity.entity.Ingredient;
+import nl.inholland.recipekeeper.model.entity.Ingredient;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

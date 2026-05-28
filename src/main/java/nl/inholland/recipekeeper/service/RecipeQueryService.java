@@ -1,7 +1,7 @@
 package nl.inholland.recipekeeper.service;
 
-import nl.inholland.recipekeeper.model.entity.service.RecipeSearchMatcher;
-import nl.inholland.recipekeeper.model.entity.entity.Recipe;
+import nl.inholland.recipekeeper.model.service.RecipeSearchMatcher;
+import nl.inholland.recipekeeper.model.entity.Recipe;
 import nl.inholland.recipekeeper.repository.RecipeRepository;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +23,7 @@ public class RecipeQueryService {
     // You are doing: “retrieve many, think locally”
     //instead of:
     //“ask DB precisely, think minimally”
-    public List<Recipe> search(String query) {
+    public List<Recipe> query(String query) {
         return repository.searchCandidates(query)
                 .stream()
                 .filter(r -> matcher.matches(r, query))

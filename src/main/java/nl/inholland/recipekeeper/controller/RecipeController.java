@@ -7,7 +7,7 @@ import nl.inholland.recipekeeper.model.dto.request.PatchRatingRequest;
 import nl.inholland.recipekeeper.model.dto.request.RecipeCreateRequest;
 import nl.inholland.recipekeeper.model.dto.response.RecipeResponse;
 import nl.inholland.recipekeeper.model.dto.response.RecipeSummaryResponse;
-import nl.inholland.recipekeeper.model.entity.entity.Recipe;
+import nl.inholland.recipekeeper.model.entity.Recipe;
 import nl.inholland.recipekeeper.mapper.RecipeMapper;
 import nl.inholland.recipekeeper.service.RecipeService;
 import org.springframework.data.domain.Page;
