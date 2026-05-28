@@ -9,10 +9,9 @@
 ![Tests](https://img.shields.io/badge/tests-junit5-green)
 
 ## 🎯About
-Recipe Keeper is a Spring Boot backend application that lets you import recipes from TheMealDB, store them locally, and enrich them with ratings, cooked status, ingredients, and downloaded images.
+Recipe Keeper is a backend application for managing a **personal recipe collection**.
 
-Each recipe is persisted in a local database and linked with normalized ingredients and related metadata.
-
+It integrates with **TheMealDB API** as its external data source, importing recipes and enriching them with local metadata such as ratings, cooked status, related recipes, and persisted images.
 
 ---
 
@@ -21,10 +20,11 @@ Each recipe is persisted in a local database and linked with normalized ingredie
 - [Features](#-features)
 - [Requirements](#-requirements)
 - [Setup](#-setup)
-- [Run Locally](#-run-locally)
-- [API Reference](#-api-reference)
+- [Run](#-run-the-application)
+- [API Overview](#-api-overview)
 - [Usage Examples](#-usage-examples)
 - [Testing](#-testing)
+- [External Services](#external-services)
 - [Project Structure](#-project-structure)
 - [Contributing](#-contributing)
 - [Credits](#-credits)
@@ -33,17 +33,18 @@ Each recipe is persisted in a local database and linked with normalized ingredie
 ---
 
 ## 📦 Features
-* Import recipes from TheMealDB
-* Store recipes with ingredients, instructions, category, and area
-* Rate recipes (1–5)
-* Mark recipes as cooked
-* Download and store:
-  * main recipe image
-  * ingredient thumbnails
-* Paginated recipe listing
-* Search by title and ingredients
-* Full recipe retrieval
-* RESTful CRUD API
+- Import recipes from TheMealDB
+- Normalize and store ingredients and measures
+- Retrieve full recipe details by ID
+- Paginated recipe listing
+- Search recipes by title or ingredients
+- Rate recipes (1–5 scale)
+- Mark recipes as cooked
+- Store related recipes based on category/area filters
+- Download and persist images locally:
+  - main recipe image
+  - two ingredient images
+- Concurrent processing for imports and image downloads
 ---
 
 
@@ -52,26 +53,27 @@ Each recipe is persisted in a local database and linked with normalized ingredie
 * Spring Boot 3.x
 * Maven
 * H2 Database (embedded)
-* TheMealDB API (free test key supported)
+* TheMealDB API key (free test key supported)
 ---
 
 ## ⚙️ Setup
 
-### Configure API (optional):
-TheMealDB works with a free test key (development and educational purposes).
-TheMealDB API can be requested from [MealDB website](https://www.themealdb.com/).
+### TheMealDB API configuration
+
+This project uses the public test key for development purposes:
 ```
 export THEMEALDB_API_KEY=1   # Linux/macOS
 setx THEMEALDB_API_KEY 1     # Windows PowerShell
 ```
+Documentation: https://www.themealdb.com/api.php
 
 ---
 
-## 🚀 Run Locally
+## 🚀 Run the Application
 
 ### 1. Clone repository:
 ```
-git clone <repo>
+git clone <repo-url>
 cd <repo>
 ```
 
@@ -80,76 +82,79 @@ cd <repo>
 ```
 # Maven
 ./mvnw clean install
-
-# Gradle
-./gradlew build
 ```
 
-### 3. Start the application:
+### 3. Start:
 
 ```
 # Maven
 ./mvnw clean install
-
-# Gradle
-./gradlew build
 ```
 
 Application runs at:
 ```
-http://localhost:8080.
+http://localhost:8080
+```
+
+Swagger UI:
+```
+http://localhost:8080/swagger-ui/index.html
 ```
 
 ---
 
-## 📡 API Reference
-Swagger UI is available at:
-```
-http://localhost:8080/swagger-ui/index.html
-```
-Use it to explore and test endpoints interactively.
+## 📡 API Overview
 
-### Recipes
+
+### Core endpoints
 | Method | Path | Description |
 |--------|------|-------------|
 | POST   | /recipes/import?name={name} | Import a recipe from TheMealDB |
 | GET    | /recipes?page={page}&size={size} | Get paginated list of recipes |
 | GET    | /recipes/{id} | Retrieve full recipe details |
-| DELETE | /recipes/{id} | Delete a recipe and associated data |
+| GET    | /recipes/search?query={query} | Search recipes by title or ingredients |
+
 
 ---
 
-### Actions
-| Method | Path | Description |
-|--------|------|-------------|
-| PATCH  | /recipes/{id}/cooked | Mark recipe as cooked / uncooked |
+### Updates
+| Method | Path | Description                |
+|--------|------|----------------------------|
+| PATCH  | /recipes/{id}/cooked | Update cooked status       |
 | PATCH  | /recipes/{id}/rating | Update recipe rating (1–5) |
-
+| DELETE | /recipes/{id} | Delete a recipe |
 ---
 
-### Search
-| Method | Path | Description |
-|--------|------|-------------|
-| GET    | /recipes/search?query={query} | Search recipes by title and ingredients |
 
 
 ## 📌 Usage examples
 
 You can interact with the API using any HTTP client (e.g. cURL, Postman). Below are some examples (curl):
 
-#### Import recipe
+### Import recipe
 ```
 curl -X POST "http://localhost:8080/recipes/import?name=Arrabiata"
 ```
 
-#### List Recipes
+### List Recipes
 
 Get recipes (paginated)
 ```
-curl "http://localhost:8080/recipes?page=0&size=10"
+curl "http://localhost:8080/recipes
 ```
 
-#### Update cooked status
+### Get recipe details
+```
+curl "http://localhost:8080/recipes/{id}"
+```
+
+### Search recipes
+
+Searches locally stored recipes by title or ingredient match.
+```
+curl "http://localhost:8080/recipes/search?query=chicken"
+```
+### Update cooked status
 ```
 curl -X PATCH "http://localhost:8080/recipes/{id}/cooked" \
 -d '{"cooked": true}'
@@ -158,73 +163,69 @@ curl -X PATCH "http://localhost:8080/recipes/{id}/cooked" \
 ---
 ## 🧪 Testing
 
-- Unit tests with JUnit
-- Mockito for external dependencies (TheMealDB)
-- Coverage for:
-   - pagination
-   - validation
-   - service logic
-
-Running tests locally:
+### Run tests
 
 ```
 # Maven
 ./mvnw test
-
-# Gradle
-./gradlew test
 ```
 
-To generate test coverage (JaCoCo):
+### Generate coverage report (JaCoCo)
 ```
 ./mvnw clean test
 ./mvnw jacoco:report
 ```
 
-Open:
+Report:
 ```
 target/site/jacoco/index.html
 ```
 ---
 
+## External Services
+### TheMealDB API
+
+Recipe Keeper relies on TheMealDB as its external recipe provider.
+
+It is used for:
+
+Recipe search and lookup
+Metadata retrieval (category, area, ingredients)
+Related recipe discovery via filters
+Image sourcing
+
+Documentation: https://www.themealdb.com/api.php
 
 ## 🧱 Project Structure
 
-## Architecture
-Layered Spring Boot architecture:
-- Spring Boot layered architecture
-- Controller → Service → Repository
-- DTO-based API layer
-- H2 database persistence
-- local image storage
----
 
 ### Project Structure
 ```
-src/main/java/com/inholland/oop3/recipekeeper
-├── controller      # REST endpoints
-├── service         # Business logic 
-├── model           # JPA entities
-├── repository      # JPA repositories
-├── dto             # API layer DTOs (Request/response objects)
-├── mapper          # DTO <-> Entity conversions
-└── exception       # Custom exceptions & handlers
+src/main/java/nl/inholland/recipekeeper
+├── controller
+├── service
+├── model
+│   ├── entity
+│   └── dto
+├── repository
+├── mapper
+├── exception
+└── client
 ```
 ### Data Storage:
 * Recipes are stored in an embedded H2 database
 * Ingredients are normalized into separate entities
 * Images are stored locally under:
 ```
-src/main/resources/static/images/recipes/
+data/images/{recipe-id}/
 ```
 
 ## 🤝 Contributing
 Contributions are welcome. Please fork the repository and submit a pull request. For major changes, open an issue first to discuss the design.
 
 ## 🧾 Credits
-
+Logo asset:
 * Logo image by macrovector_official via [Magnific](https://www.magnific.com/free-vector/cook-home-flat-composition-text-icons-fried-eggs-salad-female-character-near-stove-vector-illustration_70561823.htm#fromView=keyword&page=1&position=10&uuid=75327c74-0e7d-49f2-9798-27ca6dc9719d&query=Recipe+book+logo)
 
 ## ⚖️ License
 This project is developed as part of the OOP3 course at Hogeschool InHolland. No commercial use permitted.
-
