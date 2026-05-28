@@ -1,9 +1,15 @@
 package nl.inholland.recipekeeper.model.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.util.UUID;
 
-
+@Getter
+@Setter
+@NoArgsConstructor
 @Entity
 public class Ingredient {
 
@@ -14,24 +20,7 @@ public class Ingredient {
     @Column(unique = true)
     private String name;
 
-//    @Version
-//    private Long version;
-
-    public Ingredient() {}
-
     public Ingredient(String name) {
-        this.name = name;
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
         this.name = name;
     }
 }

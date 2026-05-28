@@ -2,11 +2,16 @@ package nl.inholland.recipekeeper.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.Objects;
 import java.util.UUID;
 
-
+@Getter
+@Setter
+@NoArgsConstructor
 @Entity
 public class RecipeIngredient {
 
@@ -23,41 +28,16 @@ public class RecipeIngredient {
 
     private String measure;
 
-//    @Version
-//    private Long version;
-
     public RecipeIngredient(Recipe recipe, Ingredient ingredient, String measure) {
         this.recipe = recipe;
         this.ingredient = ingredient;
         this.measure = measure;
     }
 
-    public RecipeIngredient() {
-
-    }
-
-    public UUID getId() { return id; }
-    public Recipe getRecipe() { return recipe; }
-    public Ingredient getIngredient() { return ingredient; }
-    public String getMeasure() { return measure; }
-
-    public void setRecipe(Recipe recipe) {
-        this.recipe = recipe;
-    }
-
-    public void setIngredient(Ingredient ingredient) {
-        this.ingredient = ingredient;
-    }
-
-    public void setMeasure(String measure) {
-        this.measure = measure;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof RecipeIngredient)) return false;
-        RecipeIngredient that = (RecipeIngredient) o;
+        if (!(o instanceof RecipeIngredient that)) return false;
         return Objects.equals(recipe, that.recipe) &&
                 Objects.equals(ingredient, that.ingredient);
     }

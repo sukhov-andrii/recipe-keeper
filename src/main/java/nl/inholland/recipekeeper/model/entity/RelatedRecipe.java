@@ -1,26 +1,27 @@
 package nl.inholland.recipekeeper.model.entity;
 
 import jakarta.persistence.*;
-
-import java.util.Objects;
-import java.util.UUID;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+import java.util.UUID;
 
 @Getter
+@Setter
 @NoArgsConstructor
 @Entity
 public class RelatedRecipe {
+
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
+
     private String relatedMealId;
     private String relatedTitle;
 
     @ManyToOne
     private Recipe recipe;
-
 
     public RelatedRecipe(String relatedMealId, String relatedTitle, Recipe recipe) {
         this.relatedMealId = relatedMealId;
@@ -37,6 +38,6 @@ public class RelatedRecipe {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return getClass().hashCode();
     }
 }
