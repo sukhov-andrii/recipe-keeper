@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
+import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -35,37 +35,29 @@ public class ImageDownloadService {
         return new ImageDownloadResult(mainPath, ingredientPaths);
     }
 
-    private String downloadMainImage(String url, Path recipeDir, UUID recipeId) {
-        if (url == null || url.isBlank()) {
-            log.warn("Image missing (type=main, recipe={})", recipeId);
-            return null;
-        }
+    private String downloadMainImage(String url, Path dir, UUID recipeId) {
+        if (url == null || url.isBlank()) return null;
 
-        Path target = recipeDir.resolve("main.jpg");
-        return downloadImage(url, target);
+        return downloadImage(url, dir.resolve("main.jpg"));
     }
+    private List<String> downloadIngredientImages(List<String> ingredients, Path dir, UUID recipeId) {
 
-    // FIXME: now method unnecessarily takes Recipe object and title object. but in needs id and name (for logs and file naming)
-    private List<String> downloadIngredientImages(List<String> ingredientNames, Path recipeDir, UUID recipeId) {
         List<String> paths = new ArrayList<>();
-
         int index = 1;
 
-        for (String ingredient : ingredientNames) {
+        for (String ingredient : ingredients) {
 
             if (paths.size() >= MAX_INGREDIENT_IMAGES) break;
             if (ingredient == null || ingredient.isBlank()) continue;
 
-            String url = buildIngredientUrl(ingredient);
-            String safeName = "ingredient-" + index + "-" + recipeId + ".png";
-            Path target = recipeDir.resolve(safeName);
+            String url = buildUrl(ingredient);
+            Path target = dir.resolve("ingredient-" + index + "-" + recipeId + ".png");
 
 
             try {
-                String path = downloadImage(url, target);
-                if (path != null) paths.add(path);
+                paths.add(downloadImage(url, target));
             } catch (ImageDownloadException e) {
-                log.warn("Failed ingredient image: {}", ingredient);
+                log.warn("Ingredient image failed: {}", ingredient);
             }
 
             index++;
@@ -75,26 +67,19 @@ public class ImageDownloadService {
     }
 
     private Path createRecipeDir(UUID recipeId) {
-        if (recipeId == null) {
-            throw new ImageDownloadException(
-                    "Recipe ID is null. Persist recipe before calling image pipeline."
-            );
-        }
-
-        Path dir = BASE_DIR.resolve(recipeId.toString());
         try {
+            Path dir = BASE_DIR.resolve(recipeId.toString());
             Files.createDirectories(dir);
+            return dir;
         } catch (Exception e) {
             throw new ImageDownloadException("Could not create image directory", e);
         }
-        return dir;
     }
 
-    private String buildIngredientUrl(String ingredient) {
-        String clean = ingredient.trim().replace(" ", "%20");
 
+    private String buildUrl(String ingredient) {
         return "https://www.themealdb.com/images/ingredients/"
-                + clean
+                + ingredient.trim().replace(" ", "%20")
                 + ".png";
     }
 
@@ -105,7 +90,7 @@ public class ImageDownloadService {
                 return target.toString();
             }
 
-            try (InputStream in = new URL(url).openStream()) {  // TODO: replace with URI
+            try (InputStream in = URI.create(url).toURL().openStream()) {
                 Files.copy(in, target);
             }
 

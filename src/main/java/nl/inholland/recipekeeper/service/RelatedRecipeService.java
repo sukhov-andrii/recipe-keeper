@@ -29,11 +29,11 @@ public class RelatedRecipeService {
         Set<RelatedRecipe> related = new LinkedHashSet<>();
 
         if (category != null) {
-            related.addAll(map(provider.filterByCategory(category), recipe));
+            related.addAll(fetchAndMap(provider.filterByCategory(category), recipe));
         }
 
         if (area != null) {
-            related.addAll(map(provider.filterByArea(area), recipe));
+            related.addAll(fetchAndMap(provider.filterByArea(area), recipe));
         }
 
         return related.stream()
@@ -41,7 +41,7 @@ public class RelatedRecipeService {
                 .toList();
     }
 
-    private List<RelatedRecipe> map(JsonNode node, Recipe recipe) {
+    private List<RelatedRecipe> fetchAndMap(JsonNode node, Recipe recipe) {
 
         JsonNode meals = node.path("meals");
 

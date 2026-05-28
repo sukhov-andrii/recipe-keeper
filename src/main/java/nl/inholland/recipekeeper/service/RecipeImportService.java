@@ -48,39 +48,31 @@ public class RecipeImportService {
 
         // 1. Fetch (NO ENCODING)
         JsonNode meal = mealDbRecipeProvider.getByName(mealName);
-
         assertNotAlreadyImported(meal);
 
         // 2. Map
         Recipe recipe = mealDbAdapter.toRecipe(meal);
 
         // 3. Ingredients
-        List<IngredientDTO> ingredients =
-                mealDbAdapter.extractIngredients(meal);
+        List<IngredientDTO> ingredients = mealDbAdapter.extractIngredients(meal);
 
-        ingredients.forEach(i ->
-                recipe.addIngredient(
-                        new RecipeIngredient(
-                                recipe,
-                                ingredientService.findOrCreate(i.name()),
-                                i.measure()
-                        )
-                )
-        );
+        addIngredients(ingredients, recipe);
 
         // 4. Related recipes
-
-        String category = meal.path("strCategory").asText(null);
-        String area = meal.path("strArea").asText(null);
-
-        recipe.setRelatedRecipes(
-                relatedRecipeService.build(recipe, category, area)
-        );
+        enrichRelatedRecipies(meal, recipe);
 
         // 5. Persist FIRST
         Recipe saved = recipeRepository.save(recipe);
 
         // 6. Filesystem side effects AFTER persistence. Images are best-effort, but dont fail import
+        enrichImages(meal, ingredients, saved);
+
+        log.info("Import completed: id={}, title={}", saved.getId(), saved.getTitle());
+
+        return saved;
+    }
+
+    private void enrichImages(JsonNode meal, List<IngredientDTO> ingredients, Recipe saved) {
         try {
             ImageDownloadResult images = imageDownloadService.downloadAllImages(
                     mealDbAdapter.extractMainImage(meal),
@@ -96,10 +88,27 @@ public class RecipeImportService {
         } catch (ImageDownloadException e) {
             log.warn("Image pipeline failed for recipe {}", saved.getId(), e);
         }
+    }
 
-        log.info("Import completed: id={}, title={}", saved.getId(), saved.getTitle());
+    private void enrichRelatedRecipies(JsonNode meal, Recipe recipe) {
+        String category = meal.path("strCategory").asText(null);
+        String area = meal.path("strArea").asText(null);
 
-        return saved;
+        recipe.setRelatedRecipes(
+                relatedRecipeService.build(recipe, category, area)
+        );
+    }
+
+    private void addIngredients(List<IngredientDTO> ingredients, Recipe recipe) {
+        ingredients.forEach(i ->
+                recipe.addIngredient(
+                        new RecipeIngredient(
+                                recipe,
+                                ingredientService.findOrCreate(i.name()),
+                                i.measure()
+                        )
+                )
+        );
     }
 
 
