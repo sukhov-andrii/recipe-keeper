@@ -6,9 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Getter
 @Setter
@@ -50,7 +48,7 @@ public class Recipe {
     private List<String> imagePaths = new ArrayList<>();
 
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<RecipeIngredient> recipeIngredients = new ArrayList<>();
+    private Set<RecipeIngredient> recipeIngredients = new HashSet<>();
 
     public Recipe(String title) {
         this.title = title;
@@ -74,5 +72,21 @@ public class Recipe {
 
     public void addTag(String tag) {
         this.tags.add(tag);
+    }
+
+    public void setTags(List<String> tags) {
+        this.tags = new ArrayList<>(tags);
+    }
+
+    public void setSteps(List<String> steps) {
+        this.steps = new ArrayList<>(steps);
+    }
+
+    public void setImagePaths(List<String> imagePaths) {
+        this.imagePaths = new ArrayList<>(imagePaths);
+    }
+
+    public void setRelatedRecipes(List<RelatedRecipe> relatedRecipes) {
+        this.relatedRecipes = new ArrayList<>(relatedRecipes);
     }
 }

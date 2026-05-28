@@ -6,9 +6,11 @@ import nl.inholland.recipekeeper.model.entity.Recipe;
 import nl.inholland.recipekeeper.model.entity.RelatedRecipe;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 @Component
@@ -22,32 +24,26 @@ public class RelatedRecipeService {
 
     public List<RelatedRecipe> build(Recipe recipe, String category, String area) {
 
-        if (category == null && area == null) {
-            return List.of();
-        }
-
         Set<RelatedRecipe> related = new LinkedHashSet<>();
 
         if (category != null) {
-            related.addAll(fetchAndMap(provider.filterByCategory(category), recipe));
+            related.addAll(map(provider.filterByCategory(category), recipe));
         }
 
         if (area != null) {
-            related.addAll(fetchAndMap(provider.filterByArea(area), recipe));
+            related.addAll(map(provider.filterByArea(area), recipe));
         }
 
         return related.stream()
                 .limit(5)
-                .toList();
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
-    private List<RelatedRecipe> fetchAndMap(JsonNode node, Recipe recipe) {
+    private List<RelatedRecipe> map(JsonNode node, Recipe recipe) {
 
         JsonNode meals = node.path("meals");
 
-        if (!meals.isArray() || meals.isEmpty()) {
-            return List.of();
-        }
+        if (!meals.isArray()) return List.of();
 
         return StreamSupport.stream(meals.spliterator(), false)
                 .map(m -> new RelatedRecipe(
@@ -55,7 +51,7 @@ public class RelatedRecipeService {
                         m.path("strMeal").asText(null),
                         recipe
                 ))
-                .filter(r -> r.getRelatedMealId() != null && r.getRelatedTitle() != null)
+                .filter(r -> r.getRelatedMealId() != null)
                 .toList();
     }
 }

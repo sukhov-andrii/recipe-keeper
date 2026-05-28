@@ -6,7 +6,11 @@ import nl.inholland.recipekeeper.model.dto.response.IngredientDTO;
 import nl.inholland.recipekeeper.model.entity.Recipe;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @Component
@@ -41,7 +45,7 @@ public class MealDbAdapter implements RecipeAdapter {
                         e.getKey().trim(),
                         e.getValue().trim()
                 ))
-                .toList();
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
     public String extractMainImage(JsonNode meal) {
@@ -52,7 +56,7 @@ public class MealDbAdapter implements RecipeAdapter {
         return Arrays.stream(meal.path("strTags").asText("").split(","))
                 .map(String::trim)
                 .filter(s -> !s.isBlank())
-                .toList();
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
     private List<String> parseSteps(JsonNode meal) {
@@ -61,6 +65,6 @@ public class MealDbAdapter implements RecipeAdapter {
         return Arrays.stream(raw.split("\\r?\\n"))
                 .map(String::trim)
                 .filter(s -> !s.isBlank())
-                .toList();
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 }
